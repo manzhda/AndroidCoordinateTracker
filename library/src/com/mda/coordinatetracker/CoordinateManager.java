@@ -20,12 +20,12 @@ import java.util.Locale;
  * Time: 2:16 AM
  */
 public class CoordinateManager {
-
     public interface CoordinateListener {
         public void onAddressRetrieved(String address, CoordinateManager coordinateManager);
         public void onLocationError(CoordinateManager coordinateManager);
         public void onNetworkError(CoordinateManager coordinateManager);
     }
+
     private LocationManager mLocationManager;
     private Context mContext;
     private final Handler mHandler;

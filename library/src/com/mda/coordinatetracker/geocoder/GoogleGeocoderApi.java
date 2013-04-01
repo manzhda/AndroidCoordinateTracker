@@ -1,15 +1,18 @@
 package com.mda.coordinatetracker.geocoder;
 
 import android.location.Location;
-import android.util.Log;
 import biz.kulik.android.jaxb.library.parser.Parser;
 import biz.kulik.android.jaxb.library.parser.ParserImpl;
 import biz.kulik.android.jaxb.library.parser.UnMarshalerTypes;
+import com.mda.coordinatetracker.network.Connection;
+import com.mda.coordinatetracker.network.urlbuilder.GeocodeURLBuilder;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GoogleGeocoderApi {
     private static final String TAG = GoogleGeocoderApi.class.getSimpleName();
@@ -20,21 +23,14 @@ public class GoogleGeocoderApi {
         URL serverAddress = null;
 
         try {
-            String urlPattern = "http://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&sensor=%b";
-            String urlFormatted = String.format(urlPattern, loc.getLatitude(), loc.getLongitude(), true);
 
-            Log.d(TAG, urlFormatted);
+            Map<String, String > params = new HashMap<String, String>();
+            params.put("latlng=", loc.getLatitude() +"," + loc.getLongitude());
+            params.put("sensor", "" + true);
 
-            serverAddress = new URL(urlFormatted);
-            //set up out communications stuff
-            connection = null;
+            String url =  new GeocodeURLBuilder(params).build();
 
-            //Set up the initial connection
-            connection = (HttpURLConnection) serverAddress.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setDoOutput(true);
-            connection.setReadTimeout(10000);
-
+            connection = Connection.createConnection(url);
             connection.connect();
 
             AddressRootResponse addressRootResponse = parse(connection.getInputStream());

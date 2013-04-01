@@ -1,7 +1,9 @@
 package com.mda.coordinatetracker;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 
 /**
@@ -76,5 +78,17 @@ public class CoordinateService extends Service {
         }
 
         return START_NOT_STICKY;
+    }
+
+    public static void startTrackLocation(Context context, CoordinateReceiver coordinateReceiver){
+        IntentFilter locationIntentFilter = new IntentFilter(CoordinateService.FILTER_ACTION);
+
+        context.registerReceiver(coordinateReceiver, locationIntentFilter);
+        context.startService(new Intent(CoordinateService.ACTION_START));
+    }
+
+    public static void stopTrackLocation(Context context, CoordinateReceiver coordinateReceiver){
+        context.unregisterReceiver(coordinateReceiver);
+        context.startService(new Intent(CoordinateService.ACTION_STOP));
     }
 }
