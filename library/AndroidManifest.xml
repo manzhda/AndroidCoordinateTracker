@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.mda.coordinatetracker"
-          android:versionCode="1"
-          android:versionName="1.0">
-    <application android:label="@string/app_name">
-        <activity android:name="ACTIVITY_ENTRY_NAME"
-                  android:label="@string/app_name">
+      package="com.mda.coordinatetracker"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <application android:label="@string/app_name" >
+        <service android:exported="false" android:name="com.mda.coordinatetracker.CoordinateService">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="com.mda.coordinatetracker.ACTION_GET_CURRENT_LOCATION" />
+                <action android:name="com.mda.coordinatetracker.ACTION_DIRECT_GEOCODE" />
+                <action android:name="com.mda.coordinatetracker.START" />
+                <action android:name="com.mda.coordinatetracker.STOP" />
             </intent-filter>
-        </activity>
+        </service>
     </application>
 </manifest> 

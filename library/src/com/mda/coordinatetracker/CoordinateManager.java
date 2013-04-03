@@ -21,7 +21,8 @@ import java.util.Locale;
  */
 public class CoordinateManager {
     public interface CoordinateListener {
-        public void onAddressRetrieved(String address, CoordinateManager coordinateManager);
+//        public void onAddressRetrieved(String address, CoordinateManager coordinateManager);
+        public void onLocationRetrieved(Location location, CoordinateManager coordinateManager);
         public void onLocationError(CoordinateManager coordinateManager);
         public void onNetworkError(CoordinateManager coordinateManager);
     }
@@ -33,8 +34,9 @@ public class CoordinateManager {
 
     // UI handler codes.
     private static final int UPDATE_ADDRESS = 1;
-    private static final int LOCATION_ERROR = 2;
-    private static final int NETWORK_ERROR = 3;
+    private static final int UPDATE_LOCATION = 2;
+    private static final int LOCATION_ERROR = 3;
+    private static final int NETWORK_ERROR = 4;
 
     private static final int TEN_SECONDS = 10000;
     private static final int TEN_METERS = 10;
@@ -47,7 +49,7 @@ public class CoordinateManager {
             // A new location update is received.  Do something useful with it.  Update the UI with
             // the location update.
             mHandler.removeCallbacks(mTimeoutErrorTask);
-            updateAddressFromLocation(location);
+            updateLocation(location);
         }
 
         @Override
@@ -62,12 +64,15 @@ public class CoordinateManager {
         mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         mContext = context;
 
-        // Handler for updating text fields on the UI like the lat/long and address.
+        // Handler for updating text fields on the UI like the lat/long and results.
         mHandler = new Handler() {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
-                    case UPDATE_ADDRESS:
-                        coordinateListener.onAddressRetrieved((String) msg.obj, CoordinateManager.this);
+//                    case UPDATE_ADDRESS:
+//                        coordinateListener.onAddressRetrieved((String) msg.obj, CoordinateManager.this);
+//                        break;
+                    case UPDATE_LOCATION:
+                        coordinateListener.onLocationRetrieved((Location) msg.obj, CoordinateManager.this);
                         break;
                     case LOCATION_ERROR:
                         coordinateListener.onLocationError(CoordinateManager.this);
@@ -123,11 +128,11 @@ public class CoordinateManager {
         // If both providers return last known locations, compare the two and use the better
         // one to update the UI.  If only one provider returns a location, use it.
         if (gpsLocation != null && networkLocation != null) {
-            updateAddressFromLocation(getBetterLocation(gpsLocation, networkLocation));
+            updateLocation(getBetterLocation(gpsLocation, networkLocation));
         } else if (gpsLocation != null) {
-            updateAddressFromLocation(gpsLocation);
+            updateLocation(gpsLocation);
         } else if (networkLocation != null) {
-            updateAddressFromLocation(networkLocation);
+            updateLocation(networkLocation);
         }
     }
 
@@ -141,13 +146,15 @@ public class CoordinateManager {
         (new ReverseGeocodingTask(mContext)).execute(new Location[] {location});
     }
 
-    private void updateAddressFromLocation(Location location) {
-        // Bypass reverse-geocoding only if the internet is presented.
-        if(isNetworkPresent(mContext)){
-            doReverseGeocoding(location);
-        } else {
-            Message.obtain(mHandler, NETWORK_ERROR, null).sendToTarget();
-        }
+    private void updateLocation(Location location) {
+        Message.obtain(mHandler, UPDATE_LOCATION, location).sendToTarget();
+
+//        if(isNetworkPresent(mContext)){
+//            Bypass reverse-geocoding only if the internet is presented.
+//            doReverseGeocoding(location);
+//        } else {
+//            Message.obtain(mHandler, NETWORK_ERROR, null).sendToTarget();
+//        }
     }
 
     /** Determines whether one Location reading is better than the current Location fix.
@@ -262,17 +269,17 @@ public class CoordinateManager {
                 addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
             } catch (IOException e) {
                 e.printStackTrace();
-                // Update address field with the exception.
+                // Update results field with the exception.
                 Message.obtain(mHandler, UPDATE_ADDRESS, getDefaultAddress(loc)).sendToTarget();
             }
             if (addresses != null && addresses.size() > 0) {
                 Address address = addresses.get(0);
-                // Format the first line of address (if available), city, and country name.
+                // Format the first line of results (if available), city, and country name.
                 String addressText = String.format("%s, %s, %s",
                         address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
                         address.getLocality(),
                         address.getCountryName());
-                // Update address field on UI.
+                // Update results field on UI.
                 Message.obtain(mHandler, UPDATE_ADDRESS, addressText).sendToTarget();
             }
         }

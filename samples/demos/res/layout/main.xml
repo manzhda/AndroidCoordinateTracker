@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Hello World, SampleActivity"
+            />
+
+    >
+    <!--<Button-->
+            <!--android:id="@+id/start_track_location"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Start track location"-->
+            <!--/>-->
+
+    <!--<Button-->
+            <!--android:id="@+id/stop_track_location"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Stop track location"-->
+            <!--/>-->
+
+
+    <EditText
+            android:layout_marginTop="20dp"
+            android:id="@+id/request_address_edit_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Type address the location you want find out."
+            />
+
+
+    <Button
+
+            android:id="@+id/request_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Request location"
+            />
+
+
+    <Button
+
+            android:id="@+id/get_my_current_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Get my current location"
+            />
+</LinearLayout>
+
