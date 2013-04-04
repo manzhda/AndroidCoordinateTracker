@@ -7,6 +7,7 @@ import android.widget.EditText;
 import com.mda.coordinatetracker.receivers.*;
 import com.mda.coordinatetracker.CoordinateService;
 import com.mda.coordinatetracker.demos.utils.SimpleMessage;
+import org.acra.ACRA;
 
 public class SampleActivity extends Activity{
     private static final String TAG = SampleActivity.class.getName();
@@ -48,9 +49,14 @@ public class SampleActivity extends Activity{
                 switch (id){
                     case R.id.request_location:
                         CoordinateService.requestLocation(SampleActivity.this, mLocationByAddressReceiver, requestedAddress.getText().toString());
+
+                        ACRA.getErrorReporter().handleException(new NullPointerException("ACRA test exception"));
                         break;
                     case R.id.get_my_current_location:
                         CoordinateService.requestCurrentLocation(SampleActivity.this, mCurrentLocationReceiver);
+
+                        ACRA.getErrorReporter().handleSilentException(new NullPointerException("ACRA test exception"));
+                        ACRA.getErrorReporter().handleSilentException(null);
                         break;
                 }
             }

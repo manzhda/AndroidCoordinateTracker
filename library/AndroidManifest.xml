@@ -3,7 +3,7 @@
       package="com.mda.coordinatetracker"
       android:versionCode="1"
       android:versionName="1.0">
-    <application android:label="@string/app_name" >
+    <application android:label="@string/app_name">
         <service android:exported="false" android:name="com.mda.coordinatetracker.CoordinateService">
             <intent-filter>
                 <action android:name="com.mda.coordinatetracker.ACTION_GET_CURRENT_LOCATION" />
