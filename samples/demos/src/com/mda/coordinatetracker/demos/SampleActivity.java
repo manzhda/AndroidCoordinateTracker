@@ -24,7 +24,7 @@ public class SampleActivity extends Activity{
 
         mLocationByAddressReceiver = new LocationByAddressReceiver(new AbstractLocationByAddressListener() {
             @Override
-            public void onLocationRetrieved(Double lat, Double lng) {
+            public void onLocationRetrieved(double lat, double lng) {
                 super.onLocationRetrieved(lat, lng);
                 SimpleMessage.show(SampleActivity.this, "Location: lat = " + lat + ", lng = " + lng);
                 CoordinateService.stopTrackAddress(SampleActivity.this, mLocationByAddressReceiver);

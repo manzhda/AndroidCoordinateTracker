@@ -9,7 +9,7 @@ import android.util.Log;
  */
 public abstract class AbstractLocationByAddressListener extends AbstractErrorListener implements LocationByAddressReceiver.LocationByAddressListener {
     @Override
-    public void onLocationRetrieved(Double lat, Double lng) {
+    public void onLocationRetrieved(double lat, double lng) {
         Log.e(TAG, "Location: lat = " + lat + ", lng = " + lng);
     }
 }

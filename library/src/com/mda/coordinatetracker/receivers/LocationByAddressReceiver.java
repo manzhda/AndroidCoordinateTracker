@@ -12,7 +12,7 @@ import com.mda.coordinatetracker.geocoder.dto.Location;
  */
 public class LocationByAddressReceiver extends ErrorReceiver{
     public static interface LocationByAddressListener extends ErrorReceiver.ErrorListener{
-        public void onLocationRetrieved(Double lat, Double lng);
+        public void onLocationRetrieved(double lat, double lng);
     }
 
     private final LocationByAddressListener mLocationByAddressListener;
