@@ -11,7 +11,7 @@ public class Location implements Parcelable {
     @SerializedName("lng")
     private Double lng;
 
-    public double getLat() {
+    public Double getLat() {
         return lat;
     }
 
@@ -19,7 +19,7 @@ public class Location implements Parcelable {
         this.lat = lat;
     }
 
-    public double getLng() {
+    public Double getLng() {
         return lng;
     }
 
