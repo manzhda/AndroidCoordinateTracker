@@ -5,11 +5,15 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 public class Location implements Parcelable {
-
     @SerializedName("lat")
     private Double lat;
     @SerializedName("lng")
     private Double lng;
+
+    public Location() {
+        lat = (double) 0;
+        lng = (double) 0;
+    }
 
     public double getLat() {
         return lat;
