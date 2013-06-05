@@ -11,8 +11,10 @@ import com.mda.coordinatetracker.network.urlbuilder.GeocodeURLBuilder;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -22,6 +24,11 @@ public class GoogleGeocoderApi {
 
     public static com.mda.coordinatetracker.geocoder.dto.Location directGeocode(String address){
         Map<String, String > params = new TreeMap<String, String>();
+        try{
+           address = URLEncoder.encode(address,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            address = "";
+        }
         params.put("address", address);
         params.put("sensor", "" + true);
 
@@ -31,7 +38,6 @@ public class GoogleGeocoderApi {
         return resultAddress != null?resultAddress.getGeometry().getLocation():null;
 
     }
-
 
     public static String reverseGeocode(Location location){
         Map<String, String > params = new TreeMap<String, String>();
