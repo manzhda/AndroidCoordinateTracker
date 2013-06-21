@@ -10,9 +10,10 @@ import com.mda.coordinatetracker.geocoder.dto.Location;
  * Date: 3/29/13
  * Time: 5:18 PM
  */
-public class LocationByAddressReceiver extends ErrorReceiver{
-    public static interface LocationByAddressListener extends ErrorReceiver.ErrorListener{
+public class LocationByAddressReceiver extends ErrorReceiver {
+    public static interface LocationByAddressListener extends ErrorReceiver.ErrorListener {
         public void onLocationRetrieved(double lat, double lng);
+        public void onReceivingError();
     }
 
     private final LocationByAddressListener mLocationByAddressListener;
@@ -26,11 +27,14 @@ public class LocationByAddressReceiver extends ErrorReceiver{
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         int status = intent.getIntExtra(CoordinateService.PARAM_STATUS, 0);
-        switch (status){
+        switch (status) {
             case CoordinateService.STATUS_LOCATION_RETRIEVED:
-                Location location = (Location)intent.getParcelableExtra(CoordinateService.PARAM_RESULT);
-                if(location != null){
+                Location location = (Location) intent.getParcelableExtra(CoordinateService.PARAM_RESULT);
+                if (location != null) {
                     mLocationByAddressListener.onLocationRetrieved(location.getLat(), location.getLng());
+                }
+                else {
+                    mLocationByAddressListener.onReceivingError();
                 }
                 break;
         }
