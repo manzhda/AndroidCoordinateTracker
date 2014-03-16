@@ -64,8 +64,12 @@ public class SampleActivity extends Activity{
 
 //        findViewById(R.id.start_track_location).setOnClickListener(listener);
 //        findViewById(R.id.stop_track_location).setOnClickListener(listener);
-        findViewById(R.id.request_location).setOnClickListener(listener);
-        findViewById(R.id.get_my_current_location).setOnClickListener(listener);
+        View requestLocationBtn = findViewById(R.id.request_location);
+        View getMyCurrentLocationBtn = findViewById(R.id.get_my_current_location);
+        requestLocationBtn.setEnabled(false);
+        getMyCurrentLocationBtn.setEnabled(false);
+        getMyCurrentLocationBtn.setOnClickListener(listener);
+        requestLocationBtn.setOnClickListener(listener);
 
         mAddressReceiver = new AddressReceiver(new AddressListenerImpl(){
             @Override
