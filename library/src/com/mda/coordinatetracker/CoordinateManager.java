@@ -10,6 +10,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.mda.coordinatetracker.geocoder.GoogleGeocoderApi;
 
 import java.io.IOException;
@@ -23,7 +26,7 @@ import java.util.Locale;
  */
 public class CoordinateManager {
     public interface CoordinateListener {
-//        public void onAddressRetrieved(String address, CoordinateManager coordinateManager);
+        public void onAddressRetrieved(String address, Location location, CoordinateManager coordinateManager);
         public void onLocationRetrieved(Location location, CoordinateManager coordinateManager);
         public void onLocationError(CoordinateManager coordinateManager);
         public void onNetworkError(CoordinateManager coordinateManager);
@@ -70,9 +73,10 @@ public class CoordinateManager {
         mHandler = new Handler() {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
-//                    case UPDATE_ADDRESS:
-//                        coordinateListener.onAddressRetrieved((String) msg.obj, CoordinateManager.this);
-//                        break;
+                    case UPDATE_ADDRESS:
+                        AddressHolder addressHolder = (AddressHolder) msg.obj;
+                        coordinateListener.onAddressRetrieved(addressHolder.mAddress, addressHolder.mLocation, CoordinateManager.this);
+                        break;
                     case UPDATE_LOCATION:
                         coordinateListener.onLocationRetrieved((Location) msg.obj, CoordinateManager.this);
                         break;
@@ -118,7 +122,7 @@ public class CoordinateManager {
 
         if(!isNetworkPresent){
             Message.obtain(mHandler, NETWORK_ERROR, null).sendToTarget();
-            return;
+//            return;
         }
 
         mHandler.postDelayed(mTimeoutErrorTask, TEN_SECONDS * 3);
@@ -150,14 +154,15 @@ public class CoordinateManager {
     }
 
     private void updateLocation(Location location) {
-        Message.obtain(mHandler, UPDATE_LOCATION, location).sendToTarget();
+//        Message.obtain(mHandler, UPDATE_LOCATION, location).sendToTarget();
 
-//        if(isNetworkPresent(mContext)){
+        if(isNetworkPresent(mContext)){
 //            Bypass reverse-geocoding only if the internet is presented.
-//            doReverseGeocoding(location);
-//        } else {
+            doReverseGeocoding(location);
+        } else {
+            sendAddressHolder(location, "");
 //            Message.obtain(mHandler, NETWORK_ERROR, null).sendToTarget();
-//        }
+        }
     }
 
     /** Determines whether one Location reading is better than the current Location fix.
@@ -259,11 +264,7 @@ public class CoordinateManager {
 
         private void byGoogleGeocodingApi(Location loc){
             String localityName = GoogleGeocoderApi.reverseGeocode(loc);
-            if("".equals(localityName)){
-                Message.obtain(mHandler, UPDATE_ADDRESS, getDefaultAddress(loc)).sendToTarget();
-            } else {
-                Message.obtain(mHandler, UPDATE_ADDRESS, localityName).sendToTarget();
-            }
+            sendAddressHolder(loc, localityName);
         }
 
         private void byGeocoder(Location loc){
@@ -274,7 +275,7 @@ public class CoordinateManager {
             } catch (IOException e) {
                 e.printStackTrace();
                 // Update results field with the exception.
-                Message.obtain(mHandler, UPDATE_ADDRESS, getDefaultAddress(loc)).sendToTarget();
+                sendAddressHolder(loc, "");
             }
             if (addresses != null && addresses.size() > 0) {
                 Address address = addresses.get(0);
@@ -284,12 +285,53 @@ public class CoordinateManager {
                         address.getLocality(),
                         address.getCountryName());
                 // Update results field on UI.
-                Message.obtain(mHandler, UPDATE_ADDRESS, addressText).sendToTarget();
+                sendAddressHolder(loc, addressText);
             }
         }
     }
 
+    private void sendAddressHolder(Location location, String localityName) {
+
+        Message.obtain(mHandler, UPDATE_ADDRESS, new AddressHolder(location, localityName)).sendToTarget();
+    }
+
     private String getDefaultAddress(Location location){
         return "Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude() + " ";
+    }
+
+    static class AddressHolder implements Parcelable {
+        Location mLocation;
+        String mAddress;
+
+        AddressHolder(Location location, String address) {
+            mLocation = location;
+            this.mAddress = address;
+        }
+
+        AddressHolder(Parcel in) {
+            mLocation = in.readParcelable(Location.class.getClassLoader());
+            mAddress = in.readString();
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeParcelable(mLocation, flags);
+            dest.writeString(mAddress);
+        }
+
+        public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+            public AddressHolder createFromParcel(Parcel in) {
+                return new AddressHolder(in);
+            }
+
+            public AddressHolder[] newArray(int size) {
+                return new AddressHolder[size];
+            }
+        };
     }
 }

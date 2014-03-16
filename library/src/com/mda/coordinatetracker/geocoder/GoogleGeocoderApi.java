@@ -47,13 +47,13 @@ public class GoogleGeocoderApi {
         String url =  new GeocodeURLBuilder(params).build();
         Address address = geocode(url);
 
-        Log.e(TAG, "Our address is "  + address.getFormattedAddress());
+        Log.d(TAG, "Our address is "  + address.getFormattedAddress());
 
         return address != null?address.getFormattedAddress():"";
     }
 
     private static Address geocode(String url) {
-        Log.e(TAG, "Url for geocode: "  + url);
+        Log.d(TAG, "Url for geocode: "  + url);
 
         String localityName = "";
         HttpURLConnection connection = null;

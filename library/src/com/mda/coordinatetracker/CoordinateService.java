@@ -68,6 +68,7 @@ public class CoordinateService extends Service {
 
     public static final String PARAM_STATUS = "com.mda.coordinatetracker.PARAM_STATUS";
     public static final String PARAM_RESULT = "com.mda.coordinatetracker.PARAM_RESULT";
+    public static final String PARAM_RESULT_SECOND = "com.mda.coordinatetracker.PARAM_RESULT_SECOND";
     public static final String PARAM_REQUESTED_ADDRESS = "com.mda.coordinatetracker.PARAM_REQUESTED_ADDRESS";
 
     public static final int STATUS_ADDRESS_RETRIEVED = 1001;
@@ -86,41 +87,49 @@ public class CoordinateService extends Service {
     public void onCreate() {
         super.onCreate();
         mCoordManager = new CoordinateManager(getBaseContext(), new CoordinateManager.CoordinateListener() {
-//            @Override
-//            public void onAddressRetrieved(String address, CoordinateManager coordinateManager) {
-//                onResult(STATUS_ADDRESS_RETRIEVED, address);
-//            }
+            @Override
+            public void onAddressRetrieved(String address, android.location.Location location, CoordinateManager coordinateManager) {
+                Intent intent = new Intent(FILTER_ACTION_TRACK_LOCATION);
+                intent.putExtra(PARAM_STATUS, STATUS_ADDRESS_RETRIEVED);
+                intent.putExtra(PARAM_RESULT, address);
+                intent.putExtra(PARAM_RESULT_SECOND, location);
+                sendLocalBroadcast(intent);
+            }
 
             @Override
             public void onLocationRetrieved(android.location.Location location, CoordinateManager coordinateManager) {
-                onResult(STATUS_LOCATION_RETRIEVED, FILTER_ACTION_CURRENT_LOCATION, location);
+                onResult(STATUS_LOCATION_RETRIEVED, FILTER_ACTION_TRACK_LOCATION, location);
             }
 
             @Override
             public void onLocationError(CoordinateManager coordinateManager) {
-                onResult(STATUS_LOCATION_ERROR, FILTER_ACTION_CURRENT_LOCATION);
+                onResult(STATUS_LOCATION_ERROR, FILTER_ACTION_TRACK_LOCATION);
             }
 
             @Override
             public void onNetworkError(CoordinateManager coordinateManager) {
-                onResult(STATUS_NETWORK_ERROR, FILTER_ACTION_CURRENT_LOCATION);
+                onResult(STATUS_NETWORK_ERROR, FILTER_ACTION_TRACK_LOCATION);
             }
         });
     }
 
 
-    @TargetApi(Build.VERSION_CODES.CUPCAKE)
+    @TargetApi(Build.VERSION_CODES.ECLAIR)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
+        if(action == null){
+            return START_NOT_STICKY;
+        }
+
         if (action.equals(ACTION_START)) {
             mCoordManager.setup();
-        }
-        else if (action.equals(ACTION_STOP)) {
+
+        } else if (action.equals(ACTION_STOP)) {
             mCoordManager.stop();
             stopSelf();
-        }
-        else if (action.equals(ACTION_DIRECT_GEOCODE)) {
+
+        } else if (action.equals(ACTION_DIRECT_GEOCODE)) {
             String address = intent.getExtras().getString(PARAM_REQUESTED_ADDRESS);
             new GeocoderAsyncTask(){
                 @TargetApi(Build.VERSION_CODES.CUPCAKE)
@@ -130,8 +139,10 @@ public class CoordinateService extends Service {
                     onResult(STATUS_LOCATION_RETRIEVED, FILTER_ACTION_DIRECT_GEOCODE, location);
                 }
             }.execute(address);
+
         } else if (action.equals(ACTION_GET_CURRENT_LOCATION)) {
             mCoordManager.setup();
+
         }
 
         return START_NOT_STICKY;

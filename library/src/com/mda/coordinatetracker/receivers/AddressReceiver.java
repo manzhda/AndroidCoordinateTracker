@@ -2,6 +2,8 @@ package com.mda.coordinatetracker.receivers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+
 import com.mda.coordinatetracker.CoordinateService;
 
 /**
@@ -11,7 +13,7 @@ import com.mda.coordinatetracker.CoordinateService;
  */
 public class AddressReceiver extends ErrorReceiver{
     public static interface AddressListener extends ErrorListener{
-        public void onAddressRetrieved(String address);
+        public void onAddressRetrieved(String address, Location location);
     }
 
     private final AddressListener mAddressListener;
@@ -24,11 +26,16 @@ public class AddressReceiver extends ErrorReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        int status = intent.getIntExtra(CoordinateService.PARAM_STATUS, 0);
+        int status = intent.getIntExtra(CoordinateService.PARAM_STATUS, -1);
         switch (status){
             case CoordinateService.STATUS_ADDRESS_RETRIEVED:
                 String address = intent.getStringExtra(CoordinateService.PARAM_RESULT);
-                mAddressListener.onAddressRetrieved(address);
+                Location location = (Location) intent.getParcelableExtra(CoordinateService.PARAM_RESULT_SECOND);
+                if (location != null && address != null) {
+                    mAddressListener.onAddressRetrieved(address, location);
+                } else {
+                    mAddressListener.onLocationError();
+                }
                 break;
         }
     }

@@ -10,6 +10,6 @@ import android.util.Log;
 public abstract class AbstractCurrentLocationListener extends AbstractErrorListener implements CurrentLocationReceiver.CurrentLocationListener {
     @Override
     public void onLocationRetrieved(double lat, double lng) {
-        Log.e(TAG, "Location: lat = " + lat + ", lng = " + lng);
+        Log.d(TAG, "Location: lat = " + lat + ", lng = " + lng);
     }
 }
