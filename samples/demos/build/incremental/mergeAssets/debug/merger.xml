@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/assets" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/build-types/debug/assets" />
+    </dataSet>
+
+</merger>

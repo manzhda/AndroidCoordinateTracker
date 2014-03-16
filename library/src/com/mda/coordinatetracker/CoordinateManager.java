@@ -1,10 +1,12 @@
 package com.mda.coordinatetracker;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.location.*;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -140,6 +142,7 @@ public class CoordinateManager {
         mLocationManager.removeUpdates(listener);
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private void doReverseGeocoding(Location location) {
         // Since the geocoding API is synchronous and may take a while.  You don't want to lock
         // up the UI thread.  Invoking reverse geocoding in an AsyncTask.
@@ -237,6 +240,7 @@ public class CoordinateManager {
 
     // AsyncTask encapsulating the reverse-geocoding API.  Since the geocoder API is blocked,
     // we do not want to invoke it from the UI thread.
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private class ReverseGeocodingTask extends AsyncTask<Location, Void, Void> {
         Context mContext;
 

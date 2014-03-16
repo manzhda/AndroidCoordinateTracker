@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/library/res" >
+            <file
+                path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/library/res/values/strings.xml"
+                qualifiers="" >
+                <string name="app_name" >ACTIVITY_ENTRY_NAME
+                </string>
+            </file>
+            <file
+                name="main"
+                path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/library/res/layout/main.xml"
+                qualifiers=""
+                type="layout" />
+        </source>
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/library/build/res/rs/release" />
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/library/build/res/generated/release" />
+    </dataSet>
+    <dataSet config="release" >
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/library/build-types/release/res" />
+    </dataSet>
+
+</merger>

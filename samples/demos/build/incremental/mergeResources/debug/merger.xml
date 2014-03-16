@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="unspecified" >
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/build/exploded-aar/AndroidCoordinateTracker/library/unspecified/res" >
+            <file
+                path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/build/exploded-aar/AndroidCoordinateTracker/library/unspecified/res/values/values.xml"
+                qualifiers="" >
+                <string name="app_name" >ACTIVITY_ENTRY_NAME
+                </string>
+            </file>
+            <file
+                name="main"
+                path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/build/exploded-aar/AndroidCoordinateTracker/library/unspecified/res/layout/main.xml"
+                qualifiers=""
+                type="layout" />
+        </source>
+    </dataSet>
+    <dataSet config="main" >
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/res" >
+            <file
+                path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/res/values/strings.xml"
+                qualifiers="" >
+                <string name="app_name" >SampleActivity
+                </string>
+            </file>
+            <file
+                name="main"
+                path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/res/layout/main.xml"
+                qualifiers=""
+                type="layout" />
+        </source>
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/build/res/rs/debug" />
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/build/res/generated/debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/home/mda/Projects/TheAwesomeCompany/AndroidCoordinateTracker/samples/demos/build-types/debug/res" />
+    </dataSet>
+
+</merger>

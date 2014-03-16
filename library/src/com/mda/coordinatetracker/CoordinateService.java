@@ -1,10 +1,12 @@
 package com.mda.coordinatetracker;
 
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -107,6 +109,7 @@ public class CoordinateService extends Service {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
@@ -120,6 +123,7 @@ public class CoordinateService extends Service {
         else if (action.equals(ACTION_DIRECT_GEOCODE)) {
             String address = intent.getExtras().getString(PARAM_REQUESTED_ADDRESS);
             new GeocoderAsyncTask(){
+                @TargetApi(Build.VERSION_CODES.CUPCAKE)
                 @Override
                 protected void onPostExecute(Location location) {
                     super.onPostExecute(location);
@@ -140,6 +144,7 @@ public class CoordinateService extends Service {
         broadcastManager.registerReceiver(broadcast, locationIntentFilter);
     }
 
+    @TargetApi(Build.VERSION_CODES.DONUT)
     private static Intent createIntent(Context context, String action){
         Intent intent = new Intent();
         intent.setAction(action);
