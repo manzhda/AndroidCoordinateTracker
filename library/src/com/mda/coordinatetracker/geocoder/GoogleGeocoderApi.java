@@ -47,8 +47,6 @@ public class GoogleGeocoderApi {
         String url =  new GeocodeURLBuilder(params).build();
         Address address = geocode(url);
 
-        Log.d(TAG, "Our address is "  + address.getFormattedAddress());
-
         return address != null?address.getFormattedAddress():"";
     }
 
@@ -71,7 +69,7 @@ public class GoogleGeocoderApi {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Log.d(TAG, "Couldn't get address", ex);
         }
         return null;
     }
