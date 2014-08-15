@@ -51,7 +51,7 @@ public class GoogleGeocoderApi {
     }
 
     private static Address geocode(String url) {
-        Log.d(TAG, "Url for geocode: "  + url);
+//        Log.d(TAG, "Url for geocode: "  + url);
 
         String localityName = "";
         HttpURLConnection connection = null;
