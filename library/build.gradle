@@ -1,5 +1,4 @@
 apply plugin: 'android-library'
-apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
@@ -38,3 +37,4 @@ android {
         release.setRoot('build-types/release')
     }
 }
+apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
